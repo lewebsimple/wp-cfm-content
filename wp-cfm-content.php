@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-CFM Content
 Description: Content support for WordPress Configuration Management
-Version: 0.1.0
+Version: 0.1.1
 Author: Pascal Martineau <pascal@lewebsimple.ca>
 License: GPLv3
 */
