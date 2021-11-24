@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-CFM Content
 Description: Content support for WordPress Configuration Management
-Version: 0.1.1
+Version: 0.1.2
 Author: Pascal Martineau <pascal@lewebsimple.ca>
 License: GPLv3
 */
@@ -122,7 +122,10 @@ class WPCFM_Content {
 			$wpdb->delete( $wpdb->postmeta, array( 'post_id' => $post_id ) );
 			if ( ! empty( $new_value['postmeta'][ $post_id ] ) ) {
 				$values = array_map( function ( $meta ) use ( $post_id ) {
-					return "($post_id,'${meta['meta_key']}','${meta['meta_value']}')";
+					$meta_key   = esc_sql( $meta['meta_key'] );
+					$meta_value = esc_sql( $meta['meta_value'] );
+
+					return "($post_id,'$meta_key','$meta_value')";
 				}, $new_value['postmeta'][ $post_id ] );
 				$wpdb->query( sprintf( "INSERT INTO $wpdb->postmeta (`post_id`, `meta_key`, `meta_value`) VALUES %s;", implode( ',', $values ) ) );
 			}

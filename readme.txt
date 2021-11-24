@@ -4,7 +4,7 @@ Tags: configuration, settings, configuration management, features, wordpress, wp
 Requires at least: 4.7
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,9 @@ WP-CFM Content lets you copy content to / from the filesystem. Easily deploy con
 This plugin isn't meant to be used for migrating content from one site to another as is expects post & term IDs to be matching.
 
 == Changelog ==
+
+= 0.1.2 =
+* Fix SQL errors in postmeta query with esc_sql
 
 = 0.1.1 =
 * Add composer.json
