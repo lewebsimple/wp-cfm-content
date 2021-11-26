@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-CFM Content
 Description: Content support for WordPress Configuration Management
-Version: 0.1.2
+Version: 0.2.0
 Author: Pascal Martineau <pascal@lewebsimple.ca>
 License: GPLv3
 */
@@ -26,12 +26,11 @@ class WPCFM_Content {
 			/**
 			 * Determine if post type can be managed by WP-CFM Content
 			 */
-			$enabled = apply_filters( 'wpcfm_content/enabled', $post_type->public, $post_type );
-			$enabled = apply_filters( 'wpcfm_content/enabled/post_type=' . $post_type->name, $enabled, $post_type );
+			$enabled = apply_filters( 'wpcfm_content/post_type/enabled', $post_type->public, $post_type );
+			$enabled = apply_filters( 'wpcfm_content/post_type/enabled/' . $post_type->name, $enabled, $post_type );
 			if ( ! $enabled ) {
 				continue;
 			}
-
 
 			$items[ 'content/' . $post_type->name ] = array(
 				'value' => json_encode( $this->get_value( $post_type->name ) ),
@@ -61,7 +60,15 @@ class WPCFM_Content {
 			$value['postmeta'][ $post_id ] = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id ORDER BY meta_key ASC;", ARRAY_A );
 
 			// Terms
-			foreach ( get_object_taxonomies( $post_type ) as $taxonomy ) {
+			foreach ( get_object_taxonomies( $post_type, 'objects' ) as $taxonomy => $wp_taxonomy ) {
+				/**
+				 * Determine if taxonomy terms can be managed by WP-CFM Content
+				 */
+				$enabled = apply_filters( 'wpcfm_content/terms/enabled', $wp_taxonomy->public, $wp_taxonomy );
+				$enabled = apply_filters( 'wpcfm_content/terms/enabled/' . $taxonomy, $enabled, $wp_taxonomy );
+				if ( ! $enabled ) {
+					continue;
+				}
 				if ( is_wp_error( $terms = get_the_terms( $post_id, $taxonomy ) ?: array() ) ) {
 					continue;
 				}
